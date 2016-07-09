@@ -1,0 +1,21 @@
+<div class="jumbotron" >
+  <h2>Welcome to chatapp, Please Login</h2>
+  <p class="lead">
+    <img src="images/chatapp.png" alt="I'm Yeoman" width="150" height="150"><br>
+    enter your user id
+  </p>
+  <p>
+    <form ng-submit="login.signIn();">
+				<input type="text" ng-model="login.userName" placeholder="user id"><br>
+				<input class="btn btn-lg btn-success" type="submit" value="login">
+			</form>
+      <div class="alert alert-danger" style="display:none;" id="alert">
+        Please enter username.
+    </div>
+
+      <div class="alert alert-success" id="newUserCreated" style="display:none;">
+          <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        User wasn't found, new user created
+      </div>
+    </p>
+</div>

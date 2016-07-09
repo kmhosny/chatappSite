@@ -1,0 +1,113 @@
+<div id="tempMsg" class="input-group modal fade" role="dialog">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        Start New Chat
+      </div>
+    <div class="modal-body">
+      <div ng-repeat="user in main.getAvailableUsers()" ng-hide="user.id==main.currentUser.id">
+        <input type="checkbox" id="user{{$index}}"> {{user.username}}
+      </div>
+      <input type="text" ng-model="main.textMessage" placeholder="message" class="form-control" maxlength="100">
+      <button id="addParticipants" class="btn btn-lg btn-success" ng-click="main.addParticipants()">+</button>
+    </div>
+  </div>
+  </div>
+</div>
+
+  <div class="row content">
+    <div class="col-md-4 convSide" id="conversationsSide">
+        <div class="currentUserTitle">
+          <div class="row">
+            <div class="col-md-2">
+              <img src="images/yeoman.png" class="img-circle" alt="Yeoman" width="50" height="50"/>
+            </div>
+            <div class="col-md-10">
+              <h3>
+                  {{main.currentUser.username}}
+                </h3>
+            </div>
+          </div>
+        </div>
+        <div class="input-group" id="addParticipantDiv">
+          <input type="text" ng-model="searchText" placeholder="search contacts" class="form-control">
+          <span class="input-group-btn"><button title="Create New Chat" id="addParticipantBtn" class="btn btn-default" ng-click="main.showAddParticipant()"><span class="glyphicon glyphicon-plus-sign"></span></button></span>
+        </div>
+        <div ng-repeat="conv in main.getConversations() | filter:searchText | orderBy:'-lastTimeStamp' track by conv.convId" class="convItem clickableDiv" ng-click="getScope().convClicked($event)" ng-class="{unread: status=main.isUnread(conv.convId)}" id={{::conv.convId}}>
+          <div class="row">
+            <div class="col-md-2">
+              <img src="images/yeoman.png" class="img-circle" alt="Yeoman" width="40" height="40"/>
+            </div>
+            <div class="col-md-10">
+            <div class="row">
+              <div class="col-md-12 chatTitle">
+                  {{main.getName(conv)}}
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-8 lastMessage" ng-bind-html="main.getLastMessage(conv.convId)"></div>
+            <div class="col-md-4" ng-class="{unreadHighlight: status}">&nbsp;</div>
+          </div>
+          </div>
+          </div>
+        </div>
+      </div>
+    <div class="col-md-8 chSide" id="chatSide">
+      <div class="row chatHeader">
+        <div class="col-md-1" id="conversationLogo">
+          <img src="images/yeoman.png" class="img-circle" alt="Yeoman" width="50" height="50"/>
+        </div>
+        <div class="col-md-10 chatTitle" id="headerBody">
+          {{main.getName(main.currentConv)}}
+        </div>
+      </div>
+      <div class="row chatContent">
+        <!-- <div class="row emptyChatClass" data-toggle="collapse" id="emptyChat">
+          <div class="col-md-12">
+
+          </div>
+        </div> -->
+        <div id="chatBody" class=" chatBodyStyle">
+          <div class="row">
+            <div ng-repeat="msg in main.filteredMsgs track by $index"  class="chatArea col-md-12" >
+              <div class="chatBlock" ng-hide="msg.text.text=='' || msg.text.text==null" ng-class="{msgSend: msg.sender==main.currentUser.id, msgReceived: msg.sender!=main.currentUser.id}">
+                <div class="row">
+                  <div class = "col-md-12 senderName" ng-hide="main.showSenderName()">{{main.getSenderName(msg.sender)}}</div>
+                </div>
+                <div class="row">
+                  <div class="col-md-12 chatMsg" ng-bind-html="msg.text.text"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div id="chatSendMessage" class="row chatSendMessage">
+        <div class="emojis row" id="emojisDiv">
+          <div class="col-md-1" ng-repeat = "emo in main.emojis">
+            <div class="clickableDiv" ng-bind-html="emo.emoji" ng-click="getScope().emoClicked($event)" id="{{::emo.id}}">
+              {{main.emojis.emoji[0]}}
+            </div>
+          </div>
+        </div>
+        <div class="col-md-1">
+          <button ng-click = "main.openEmojis()" class="btn btn-default sendEmoji" title="Emojis" data-toggle="tooltip"></button>
+        </div>
+        <div class="col-md-1">
+        <input type="file" id="fileDialog" onchange="angular.element(this).scope().sendMsgAsImage(this)"><button ng-click = "main.uploadImage()" class="btn btn-default sendImage" title="Send Photo" data-toggle="tooltip"></button>
+        </div>
+        <div class="col-md-10 input-group">
+
+            <div >
+              <div class="input-placeholder" id="inputPlaceHolder">Type a message</div>
+              <div contenteditable id="inputTextMessage" ng-model="main.textMessage" strip-br="true" placeholder="message" class="contentEditable form-control" ng-keypress="main.isEnter($event)" ng-mouseover="main.clearPlaceholder($event)" ng-mouseleave="main.clearPlaceholder($event)">
+
+              </div>
+            </div>
+            <span class="input-group-btn"><button id="SendMessage" class="btn btn-default" ng-click="main.addNewChat(false);" title="Send Message" data-toggle="tooltip"><span class="glyphicon glyphicon-send"></span></button></span>
+        </div>
+      </div>
+    </div>
+</div>
